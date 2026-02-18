@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Login — POD</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body class="login-body">
+    <div class="login-card">
+        <div class="login-icon">👩‍🏫</div>
+        <h2>Teacher Login</h2>
+        <p class="login-sub text-muted">Sign in to post updates for your students.</p>
+        <div class="login-demo">
+            <strong>Demo Credentials</strong>
+            Email: teacher@pod.com · Password: teacher123
+        </div>
+        <form class="login-form" id="teacher-login-form">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="email" placeholder="teacher@pod.com" value="teacher@pod.com"
+                    required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="password" placeholder="••••••••" value="teacher123"
+                    required />
+            </div>
+            <div id="login-error" style="color:#E53E3E;font-size:0.85rem;display:none;">Invalid credentials. Please try
+                again.</div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="login-btn">Sign In as Teacher</button>
+        </form>
+        <div class="login-back">
+            Are you a parent? <a href="parent-login.html">Parent Login →</a><br />
+            <a href="index.html" style="margin-top:8px;display:inline-block;">← Back to Home</a>
+        </div>
+    </div>
+    <script src="scripts/auth.js"></script>
+    <script>
+        document.getElementById('teacher-login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            const btn = document.getElementById('login-btn');
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+            setTimeout(() => {
+                if (loginTeacher(email, pass)) {
+                    window.location.href = 'teacher-portal.html';
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                    btn.textContent = 'Sign In as Teacher';
+                    btn.disabled = false;
+                }
+            }, 800);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parent Dashboard — POD</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">🌟</div>
+                <div class="logo-text">Wellbeing &amp; Lifestyle</div>
+                <div class="logo-sub">for POD</div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Main</div>
+                <div class="nav-item active" data-tab="dashboard"><span class="nav-icon">🏠</span> Dashboard</div>
+                <div class="nav-item" data-tab="updates"><span class="nav-icon">📋</span> Teacher Updates <span
+                        class="nav-badge" id="updates-badge">3</span></div>
+                <div class="nav-section-title">Find &amp; Explore</div>
+                <div class="nav-item" data-tab="schools"><span class="nav-icon">🏫</span> Schools Directory</div>
+                <div class="nav-item" data-tab="hospitals"><span class="nav-icon">🏥</span> Hospitals &amp; Centers
+                </div>
+                <div class="nav-item" data-tab="playareas"><span class="nav-icon">🛝</span> Play Areas</div>
+                <div class="nav-section-title">Support</div>
+                <div class="nav-item" data-tab="activities"><span class="nav-icon">🎨</span> Home Activities</div>
+                <div class="nav-item" data-tab="calm"><span class="nav-icon">🧘</span> Calm &amp; Relax</div>
+                <div class="nav-item" data-tab="guides"><span class="nav-icon">📖</span> Parent Guides</div>
+                <div class="nav-section-title">Child</div>
+                <div class="nav-item" onclick="window.location.href='child-zone.html'"><span class="nav-icon">🎮</span>
+                    Child Zone <span class="nav-badge" style="background:var(--teal);">NEW</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="avatar" id="user-avatar">S</div>
+                    <div class="user-info">
+                        <div class="name" id="user-name">Sarah</div>
+                        <div class="role">Parent</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()" title="Logout">⏻</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="main-content">
+            <header class="top-header">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div class="header-title" id="page-title">Dashboard</div>
+                </div>
+                <div class="header-actions">
+                    <div class="header-child-info">
+                        <div class="child-avatar">A</div>
+                        <span class="child-name">Alex, Age 7</span>
+                    </div>
+                    <a href="child-zone.html" class="btn btn-teal btn-sm" style="display:none;" id="child-zone-btn">🎮
+                        Child Zone</a>
+                    <button class="notif-btn" title="Notifications">🔔<span class="notif-dot"></span></button>
+                    <button class="sos-btn" id="sos-btn">🆘 SOS</button>
+                </div>
+            </header>
+
+            <main class="page-content">
+
+                <!-- DASHBOARD TAB -->
+                <section class="tab-section active" id="tab-dashboard">
+                    <div class="welcome-banner">
+                        <div>
+                            <h2>Good Morning, Sarah! ☀️</h2>
+                            <p>Alex had a great week — 3 new milestones reached!</p>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+                                <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.5);color:#fff;"
+                                    onclick="showTab('updates')">View Teacher Updates →</button>
+                                <a href="child-zone.html" class="btn"
+                                    style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);">🎮
+                                    Child Zone</a>
+                            </div>
+                        </div>
+                        <div class="emoji">🌟</div>
+                    </div>
+                    <div class="grid-3 gap-24">
+                        <div class="card text-center">
+                            <div class="progress-ring-wrap">
+                                <canvas id="ring1" width="120" height="120"></canvas>
+                                <div class="progress-ring-label">
+                                    <div class="pct">72%</div>
+                                    <div class="lbl">Communication</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card text-center">
+                            <div class="progress-ring-wrap">
+                                <canvas id="ring2" width="120" height="120"></canvas>
+                                <div class="progress-ring-label">
+                                    <div class="pct">58%</div>
+                                    <div class="lbl">Social Skills</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card text-center">
+                            <div class="progress-ring-wrap">
+                                <canvas id="ring3" width="120" height="120"></canvas>
+                                <div class="progress-ring-label">
+                                    <div class="pct">81%</div>
+                                    <div class="lbl">Motor Skills</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-2 gap-24 mt-24">
+                        <div class="card">
+                            <h4 style="margin-bottom:16px;">📈 Monthly Progress</h4>
+                            <canvas id="progressChart" height="160"></canvas>
+                        </div>
+                        <div class="card">
+                            <h4 style="margin-bottom:16px;">🏆 Recent Milestones</h4>
+                            <div class="milestone-item">
+                                <div class="milestone-check done">✓</div>
+                                <div>
+                                    <div style="font-weight:600;font-size:0.9rem;">Said 5 new words this week</div>
+                                    <div class="text-muted">Feb 15, 2026</div>
+                                </div>
+                            </div>
+                            <div class="milestone-item">
+                                <div class="milestone-check done">✓</div>
+                                <div>
+                                    <div style="font-weight:600;font-size:0.9rem;">Completed puzzle independently</div>
+                                    <div class="text-muted">Feb 12, 2026</div>
+                                </div>
+                            </div>
+                            <div class="milestone-item">
+                                <div class="milestone-check done">✓</div>
+                                <div>
+                                    <div style="font-weight:600;font-size:0.9rem;">Made eye contact during play</div>
+                                    <div class="text-muted">Feb 10, 2026</div>
+                                </div>
+                            </div>
+                            <div class="milestone-item">
+                                <div class="milestone-check pending">○</div>
+                                <div>
+                                    <div style="font-weight:600;font-size:0.9rem;">Write own name</div>
+                                    <div class="text-muted">In progress</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-4 gap-24 mt-24">
+                        <div class="card" style="cursor:pointer;text-align:center;" onclick="showTab('schools')">
+                            <div style="font-size:2rem;margin-bottom:8px;">🏫</div>
+                            <h4>Schools</h4>
+                            <p style="font-size:0.8rem;">Find inclusive schools</p>
+                        </div>
+                        <div class="card" style="cursor:pointer;text-align:center;" onclick="showTab('hospitals')">
+                            <div style="font-size:2rem;margin-bottom:8px;">🏥</div>
+                            <h4>Care Centers</h4>
+                            <p style="font-size:0.8rem;">Therapy &amp; specialists</p>
+                        </div>
+                        <div class="card" style="cursor:pointer;text-align:center;" onclick="showTab('activities')">
+                            <div style="font-size:2rem;margin-bottom:8px;">🎨</div>
+                            <h4>Activities</h4>
+                            <p style="font-size:0.8rem;">Fun home activities</p>
+                        </div>
+                        <div class="card" style="cursor:pointer;text-align:center;"
+                            onclick="window.location.href='child-zone.html'">
+                            <div style="font-size:2rem;margin-bottom:8px;">🎮</div>
+                            <h4>Child Zone</h4>
+                            <p style="font-size:0.8rem;">Games &amp; minigames</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- UPDATES TAB -->
+                <section class="tab-section" id="tab-updates">
+                    <div class="page-header">
+                        <h2>📋 Teacher Updates</h2>
+                        <p>Latest updates from Alex's teachers at school.</p>
+                    </div>
+                    <div class="card" id="updates-feed">
+                        <div class="update-item unread">
+                            <div class="update-dot"></div>
+                            <div>
+                                <div style="font-weight:700;">Great social interaction today! 🌟</div>
+                                <div class="update-meta">Ms. Johnson · Sunshine Class · Feb 18, 2026 · <span
+                                        class="badge badge-teal">Social</span></div>
+                                <p style="margin-top:8px;font-size:0.9rem;">Alex initiated play with two classmates
+                                    during recess today. He shared his toys and took turns — a huge improvement! Mood:
+                                    😊 Happy</p>
+                            </div>
+                        </div>
+                        <div class="update-item unread">
+                            <div class="update-dot"></div>
+                            <div>
+                                <div style="font-weight:700;">Speech therapy session went well</div>
+                                <div class="update-meta">Ms. Johnson · Feb 17, 2026 · <span
+                                        class="badge badge-lavender">Learning</span></div>
+                                <p style="margin-top:8px;font-size:0.9rem;">Alex practiced 8 new words today and
+                                    successfully repeated 6 of them. His articulation is improving steadily. Keep
+                                    practicing at home! Mood: 😄 Excited</p>
+                            </div>
+                        </div>
+                        <div class="update-item unread">
+                            <div class="update-dot"></div>
+                            <div>
+                                <div style="font-weight:700;">Sensory break helped calm Alex</div>
+                                <div class="update-meta">Ms. Johnson · Feb 16, 2026 · <span
+                                        class="badge badge-coral">Behavior</span></div>
+                                <p style="margin-top:8px;font-size:0.9rem;">Alex had a difficult morning but responded
+                                    very well to the sensory break room. After 10 minutes with the weighted blanket, he
+                                    rejoined the class calmly. Mood: 😌 Calm</p>
+                            </div>
+                        </div>
+                        <div class="update-item">
+                            <div class="update-dot" style="background:#ccc;"></div>
+                            <div>
+                                <div style="font-weight:700;">Art class achievement</div>
+                                <div class="update-meta">Ms. Johnson · Feb 14, 2026 · <span
+                                        class="badge badge-gold">Achievement</span></div>
+                                <p style="margin-top:8px;font-size:0.9rem;">Alex completed his first full painting
+                                    independently! He chose his own colors and stayed focused for 20 minutes. We
+                                    displayed it in the classroom. Mood: 😊 Happy</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SCHOOLS TAB -->
+                <section class="tab-section" id="tab-schools">
+                    <div class="page-header">
+                        <h2>🏫 Schools Directory</h2>
+                        <p>Inclusive and specialist schools across the UAE. All contacts verified.</p>
+                    </div>
+                    <div class="city-filter-row" id="schools-filter"></div>
+                    <div class="grid-2 gap-24" id="schools-grid"></div>
+                </section>
+
+                <!-- HOSPITALS TAB -->
+                <section class="tab-section" id="tab-hospitals">
+                    <div class="page-header">
+                        <h2>🏥 Hospitals &amp; Care Centers</h2>
+                        <p>Therapy centers, specialists, and clinics. All contacts verified.</p>
+                    </div>
+                    <div class="city-filter-row" id="hospitals-filter"></div>
+                    <div class="grid-2 gap-24" id="hospitals-grid"></div>
+                </section>
+
+                <!-- PLAY AREAS TAB -->
+                <section class="tab-section" id="tab-playareas">
+                    <div class="page-header">
+                        <h2>🛝 Play Areas</h2>
+                        <p>Sensory-friendly and inclusive play spaces. Click 📍 Map to get directions.</p>
+                    </div>
+                    <div class="city-filter-row" id="playareas-filter"></div>
+                    <div class="grid-3 gap-24" id="playareas-grid"></div>
+                </section>
+
+                <!-- ACTIVITIES TAB -->
+                <section class="tab-section" id="tab-activities">
+                    <div class="page-header">
+                        <h2>🎨 Home Activities</h2>
+                        <p>Engaging, therapeutic activities to do at home. Click any card to see step-by-step
+                            instructions.</p>
+                    </div>
+                    <div class="grid-3 gap-24" id="activities-grid"></div>
+                </section>
+
+                <!-- CALM TAB -->
+                <section class="tab-section" id="tab-calm">
+                    <div class="page-header">
+                        <h2>🧘 Calm &amp; Relax</h2>
+                        <p>Techniques to help your child feel safe, calm, and comfortable.</p>
+                    </div>
+                    <div class="grid-3 gap-24">
+                        <div class="calm-card">
+                            <div class="calm-icon">🫁</div>
+                            <h4>Breathing Exercise</h4>
+                            <p style="font-size:0.85rem;margin:8px 0 16px;">Tap the circle and breathe with it</p>
+                            <div class="breathing-circle" id="breath-circle" onclick="startBreathing()">Tap to Start
+                            </div>
+                            <p id="breath-label" style="font-size:0.85rem;color:#7C6FCD;font-weight:600;"></p>
+                        </div>
+                        <div class="calm-card">
+                            <div class="calm-icon">🛏️</div>
+                            <h4>Weighted Blanket</h4>
+                            <p style="font-size:0.85rem;margin-top:8px;">Deep pressure from a weighted blanket (1–2kg)
+                                provides calming proprioceptive input. Use during meltdowns or before sleep.</p>
+                        </div>
+                        <div class="calm-card">
+                            <div class="calm-icon">🎵</div>
+                            <h4>Calming Music</h4>
+                            <p style="font-size:0.85rem;margin-top:8px;">Soft instrumental music, nature sounds, or
+                                white noise can reduce anxiety. Keep volume low and consistent.</p>
+                            <button class="btn btn-ghost btn-sm mt-16"
+                                onclick="window.open('https://www.youtube.com/results?search_query=calming+music+for+autism','_blank')">▶
+                                Find Music</button>
+                        </div>
+                        <div class="calm-card">
+                            <div class="calm-icon">🌊</div>
+                            <h4>Sensory Break</h4>
+                            <p style="font-size:0.85rem;margin-top:8px;">Create a quiet corner with dim lighting, soft
+                                textures, and minimal noise. Allow 10–15 minutes to decompress.</p>
+                        </div>
+                        <div class="calm-card">
+                            <div class="calm-icon">🤗</div>
+                            <h4>Deep Pressure Hug</h4>
+                            <p style="font-size:0.85rem;margin-top:8px;">Firm, sustained hugs activate the
+                                parasympathetic nervous system. Ask your child before hugging and respect their
+                                response.</p>
+                        </div>
+                        <div class="calm-card">
+                            <div class="calm-icon">🖐️</div>
+                            <h4>Fidget Tools</h4>
+                            <p style="font-size:0.85rem;margin-top:8px;">Fidget spinners, stress balls, putty, or chew
+                                necklaces help channel sensory needs safely. Keep a basket of options available.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GUIDES TAB -->
+                <section class="tab-section" id="tab-guides">
+                    <div class="page-header">
+                        <h2>📖 Parent Guides</h2>
+                        <p>Detailed, practical guides for daily care at home. Click any guide to expand.</p>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:12px;" id="guides-list"></div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- SOS Modal -->
+    <div class="modal-overlay" id="sos-modal">
+        <div class="modal">
+            <div class="modal-icon">🆘</div>
+            <h3>Emergency Call</h3>
+            <p>This will call emergency services (999). Are you sure?</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline btn-block" id="sos-cancel">Cancel</button>
+                <button class="btn btn-block" style="background:linear-gradient(135deg,#E53E3E,#FC8181);color:#fff;"
+                    id="sos-call">📞 Call Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <button class="chatbot-fab" id="chatbot-fab" title="Chat with Lily">🤖</button>
+    <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header">
+            <div class="bot-avatar">🤖</div>
+            <div>
+                <div class="bot-name">Lily — POD Assistant</div>
+                <div class="bot-status">● Online · Always here to help</div>
+            </div>
+            <button class="chatbot-close" id="chatbot-close">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="chat-msg bot">
+                <div class="msg-avatar">🤖</div>
+                <div class="bubble">Hi! I'm Lily 💜 I'm here to help you with any questions about supporting Alex. Ask
+                    me about feeding, activities, schools, or anything else!</div>
+            </div>
+        </div>
+        <div class="chatbot-suggestions">
+            <button class="suggestion-chip">Feeding tips</button>
+            <button class="suggestion-chip">Calm meltdown</button>
+            <button class="suggestion-chip">Sleep routine</button>
+            <button class="suggestion-chip">Find schools</button>
+        </div>
+        <div class="chatbot-input-row">
+            <input class="chatbot-input" id="chatbot-input" placeholder="Ask me anything..." />
+            <button class="chatbot-send" id="chatbot-send">➤</button>
+        </div>
+    </div>
+
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/sos.js"></script>
+    <script src="scripts/chatbot.js"></script>
+    <script src="scripts/dashboard.js"></script>
+    <script>
+        const user = requireAuth('parent');
+        if (user) {
+            document.getElementById('user-name').textContent = user.name;
+            document.getElementById('user-avatar').textContent = user.name[0];
+        }
+
+        const TAB_TITLES = {
+            dashboard: 'Dashboard', updates: 'Teacher Updates',
+            schools: 'Schools Directory', hospitals: 'Hospitals & Centers',
+            playareas: 'Play Areas', activities: 'Home Activities',
+            calm: 'Calm & Relax', guides: 'Parent Guides'
+        };
+
+        function showTab(id) {
+            document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item[data-tab]').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + id).classList.add('active');
+            const navItem = document.querySelector(`[data-tab="${id}"]`);
+            if (navItem) navItem.classList.add('active');
+            document.getElementById('page-title').textContent = TAB_TITLES[id] || id;
+            if (id === 'updates') document.getElementById('updates-badge').style.display = 'none';
+            // Reset city filter when switching directory tabs
+            if (['schools', 'hospitals', 'playareas'].includes(id)) {
+                activeCity = 'All';
+                if (id === 'schools') { renderCityFilter('schools-filter', 'schools'); renderSchools(); }
+                if (id === 'hospitals') { renderCityFilter('hospitals-filter', 'hospitals'); renderHospitals(); }
+                if (id === 'playareas') { renderCityFilter('playareas-filter', 'playareas'); renderPlayAreas(); }
+            }
+            closeSidebar();
+        }
+
+        document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
+            item.addEventListener('click', () => showTab(item.dataset.tab));
+        });
+
+        // Mobile sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebar-overlay').classList.toggle('open');
+        }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebar-overlay').classList.remove('open');
+        }
+
+        initSOS();
+        initChatbot();
+    </script>
+</body>
+
+</html>

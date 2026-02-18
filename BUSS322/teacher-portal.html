@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Portal — POD</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body style="background:var(--bg);min-height:100vh;">
+
+    <!-- Header -->
+    <header
+        style="background:#fff;border-bottom:1px solid var(--border);padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow-sm);">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="font-size:1.5rem;">🌟</div>
+            <div>
+                <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:var(--text-primary);">
+                    Wellbeing &amp; Lifestyle for POD</div>
+                <div style="font-size:0.75rem;color:var(--text-muted);">Teacher Portal</div>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div
+                style="background:var(--lavender-pale);padding:6px 14px;border-radius:99px;font-size:0.85rem;font-weight:700;color:var(--lavender);">
+                👩‍🏫 <span id="teacher-name">Ms. Johnson</span></div>
+            <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
+        </div>
+    </header>
+
+    <div style="max-width:960px;margin:0 auto;padding:32px 24px;">
+
+        <!-- Welcome -->
+        <div class="welcome-banner" style="margin-bottom:28px;">
+            <div>
+                <h2>Teacher Portal 👩‍🏫</h2>
+                <p>Post updates for your students and keep parents informed.</p>
+            </div>
+            <div class="emoji">📋</div>
+        </div>
+
+        <!-- Post Update Form -->
+        <div class="update-form-card">
+            <h3 style="margin-bottom:20px;">✏️ Post a New Update</h3>
+            <form id="update-form" style="display:flex;flex-direction:column;gap:16px;">
+                <div class="grid-2 gap-16">
+                    <div class="form-group">
+                        <label class="form-label">Child's Name</label>
+                        <select class="form-select" id="child-name">
+                            <option value="Alex">Alex (Age 7)</option>
+                            <option value="Mia">Mia (Age 5)</option>
+                            <option value="Omar">Omar (Age 9)</option>
+                            <option value="Layla">Layla (Age 6)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="category">
+                            <option value="Social">🤝 Social</option>
+                            <option value="Learning">📚 Learning</option>
+                            <option value="Behavior">💙 Behavior</option>
+                            <option value="Achievement">🏆 Achievement</option>
+                            <option value="Health">❤️ Health</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Update Title</label>
+                    <input type="text" class="form-input" id="update-title"
+                        placeholder="e.g. Great social interaction today!" required />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Detailed Notes</label>
+                    <textarea class="form-textarea" id="update-notes"
+                        placeholder="Describe what happened, any improvements, areas to work on at home..."
+                        required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Child's Mood Today</label>
+                    <div class="mood-selector">
+                        <button type="button" class="mood-btn selected" data-mood="😊 Happy">😊<br /><span
+                                style="font-size:0.65rem;">Happy</span></button>
+                        <button type="button" class="mood-btn" data-mood="😄 Excited">😄<br /><span
+                                style="font-size:0.65rem;">Excited</span></button>
+                        <button type="button" class="mood-btn" data-mood="😌 Calm">😌<br /><span
+                                style="font-size:0.65rem;">Calm</span></button>
+                        <button type="button" class="mood-btn" data-mood="😔 Sad">😔<br /><span
+                                style="font-size:0.65rem;">Sad</span></button>
+                        <button type="button" class="mood-btn" data-mood="😤 Frustrated">😤<br /><span
+                                style="font-size:0.65rem;">Frustrated</span></button>
+                    </div>
+                </div>
+                <div id="form-success"
+                    style="display:none;background:var(--teal-pale);color:var(--teal);padding:12px 16px;border-radius:var(--radius-md);font-weight:600;">
+                    ✓ Update posted successfully! Parents will be notified.</div>
+                <button type="submit" class="btn btn-primary btn-lg">📤 Post Update</button>
+            </form>
+        </div>
+
+        <!-- Posted Updates -->
+        <div class="posted-updates">
+            <h3 style="margin-bottom:16px;">📬 Recent Updates Posted</h3>
+            <div id="updates-list"></div>
+        </div>
+
+    </div>
+
+    <script src="scripts/auth.js"></script>
+    <script>
+        const user = requireAuth('teacher');
+        if (user) document.getElementById('teacher-name').textContent = user.name;
+
+        const CATEGORY_COLORS = { Social: '#7C6FCD', Learning: '#3DBDA7', Behavior: '#FF7B6B', Achievement: '#F5A623', Health: '#E53E3E' };
+
+        // Mood selector
+        let selectedMood = '😊 Happy';
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedMood = btn.dataset.mood;
+            });
+        });
+
+        function getUpdates() {
+            return JSON.parse(localStorage.getItem('pod_updates') || '[]');
+        }
+        function saveUpdates(arr) {
+            localStorage.setItem('pod_updates', JSON.stringify(arr));
+        }
+
+        function renderUpdates() {
+            const list = document.getElementById('updates-list');
+            const updates = getUpdates();
+            if (updates.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted);">No updates posted yet. Post your first update above!</div>';
+                return;
+            }
+            list.innerHTML = updates.slice().reverse().map(u => `
+        <div class="posted-update-item">
+          <div class="update-category-dot" style="background:${CATEGORY_COLORS[u.category] || '#7C6FCD'};"></div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <strong>${u.title}</strong>
+              <span class="badge badge-lavender">${u.category}</span>
+              <span class="badge badge-teal">${u.child}</span>
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin:4px 0;">${u.date} · Mood: ${u.mood}</div>
+            <p style="font-size:0.875rem;">${u.notes}</p>
+          </div>
+        </div>`).join('');
+        }
+
+        // Seed with demo updates if empty
+        if (getUpdates().length === 0) {
+            saveUpdates([
+                { child: 'Alex', category: 'Social', title: 'Great social interaction today! 🌟', notes: 'Alex initiated play with two classmates during recess. He shared his toys and took turns — a huge improvement!', mood: '😊 Happy', date: 'Feb 18, 2026' },
+                { child: 'Alex', category: 'Learning', title: 'Speech therapy session went well', notes: 'Alex practiced 8 new words today and successfully repeated 6 of them. His articulation is improving steadily.', mood: '😄 Excited', date: 'Feb 17, 2026' },
+                { child: 'Alex', category: 'Behavior', title: 'Sensory break helped calm Alex', notes: 'Alex had a difficult morning but responded very well to the sensory break room. After 10 minutes he rejoined the class calmly.', mood: '😌 Calm', date: 'Feb 16, 2026' },
+                { child: 'Alex', category: 'Achievement', title: 'Art class achievement', notes: 'Alex completed his first full painting independently! He chose his own colors and stayed focused for 20 minutes.', mood: '😊 Happy', date: 'Feb 14, 2026' }
+            ]);
+        }
+        renderUpdates();
+
+        document.getElementById('update-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const update = {
+                child: document.getElementById('child-name').value,
+                category: document.getElementById('category').value,
+                title: document.getElementById('update-title').value,
+                notes: document.getElementById('update-notes').value,
+                mood: selectedMood,
+                date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+            };
+            const updates = getUpdates();
+            updates.push(update);
+            saveUpdates(updates);
+            document.getElementById('form-success').style.display = 'block';
+            this.reset();
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector('.mood-btn').classList.add('selected');
+            selectedMood = '😊 Happy';
+            setTimeout(() => document.getElementById('form-success').style.display = 'none', 3000);
+            renderUpdates();
+        });
+    </script>
+</body>
+
+</html>

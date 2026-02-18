@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parent Login — POD</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body class="login-body">
+    <div class="login-card">
+        <div class="login-icon">👨‍👩‍👧</div>
+        <h2>Parent Login</h2>
+        <p class="login-sub text-muted">Welcome back! Sign in to your parent portal.</p>
+        <div class="login-demo">
+            <strong>Demo Credentials</strong>
+            Email: parent@pod.com · Password: parent123
+        </div>
+        <form class="login-form" id="parent-login-form">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="email" placeholder="parent@pod.com" value="parent@pod.com"
+                    required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="password" placeholder="••••••••" value="parent123"
+                    required />
+            </div>
+            <div id="login-error" style="color:#E53E3E;font-size:0.85rem;display:none;">Invalid credentials. Please try
+                again.</div>
+            <button type="submit" class="btn btn-teal btn-block btn-lg" id="login-btn">Sign In as Parent</button>
+        </form>
+        <div class="login-back">
+            Are you a teacher? <a href="teacher-login.html">Teacher Login →</a><br />
+            <a href="index.html" style="margin-top:8px;display:inline-block;">← Back to Home</a>
+        </div>
+    </div>
+    <script src="scripts/auth.js"></script>
+    <script>
+        document.getElementById('parent-login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            const btn = document.getElementById('login-btn');
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+            setTimeout(() => {
+                if (loginParent(email, pass)) {
+                    window.location.href = 'parent-dashboard.html';
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                    btn.textContent = 'Sign In as Parent';
+                    btn.disabled = false;
+                }
+            }, 800);
+        });
+    </script>
+</body>
+
+</html>

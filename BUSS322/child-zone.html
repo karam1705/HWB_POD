@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Child Zone 🌟 — POD</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1740 0%, #2d2a4a 50%, #1e3a4a 100%);
+            min-height: 100vh;
+        }
+
+        .stars-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--d, 3s) infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0
+            }
+
+            50% {
+                opacity: var(--o, 0.8)
+            }
+        }
+
+        .content-wrap {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Twinkling stars background -->
+    <div class="stars-bg" id="stars-bg"></div>
+
+    <div class="content-wrap">
+        <!-- Header -->
+        <header class="child-zone-header">
+            <div style="display:flex;align-items:center;gap:14px;">
+                <a href="parent-dashboard.html"
+                    style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:8px 16px;border-radius:99px;font-size:0.85rem;font-weight:700;display:flex;align-items:center;gap:6px;">←
+                    Back</a>
+                <div>
+                    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;color:#fff;">🌟 Child
+                        Zone</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Fun games & activities just for you!
+                    </div>
+                </div>
+            </div>
+            <div id="child-greeting" style="font-size:1.5rem;"></div>
+        </header>
+
+        <div class="child-zone-content">
+            <!-- Welcome Banner -->
+            <div
+                style="background:linear-gradient(135deg,rgba(124,111,205,0.4),rgba(61,189,167,0.4));border:1px solid rgba(255,255,255,0.15);border-radius:var(--radius-xl);padding:28px 32px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+                <div>
+                    <h2 style="color:#fff;font-size:1.8rem;">Hello, Superstar! 🦸</h2>
+                    <p style="color:rgba(255,255,255,0.7);margin-top:6px;">Pick a game and let's have fun together!</p>
+                </div>
+                <div style="font-size:4rem;">🎮</div>
+            </div>
+
+            <!-- Game Cards Grid -->
+            <div class="grid-3 gap-24" style="margin-bottom:40px;">
+                <div class="game-card" onclick="openGame('memory')">
+                    <div class="game-card-top">🃏</div>
+                    <div class="game-card-body">
+                        <div class="game-badge">Memory</div>
+                        <h4>Animal Match</h4>
+                        <p>Find the matching animal pairs! Flip the cards and remember where they are.</p>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('colors')">
+                    <div class="game-card-top">🎨</div>
+                    <div class="game-card-body">
+                        <div class="game-badge">Learning</div>
+                        <h4>Color Quest</h4>
+                        <p>Can you find the right color? Tap the matching color circle!</p>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('counting')">
+                    <div class="game-card-top">🔢</div>
+                    <div class="game-card-body">
+                        <div class="game-badge">Numbers</div>
+                        <h4>Count & Tap</h4>
+                        <p>Count the emojis and pick the right number. How many can you get right?</p>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('shapes')">
+                    <div class="game-card-top">🔷</div>
+                    <div class="game-card-body">
+                        <div class="game-badge">Shapes</div>
+                        <h4>Shape Finder</h4>
+                        <p>Match the shape name to the right picture. Circles, squares, and more!</p>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('emotions')">
+                    <div class="game-card-top">😊</div>
+                    <div class="game-card-body">
+                        <div class="game-badge">Emotions</div>
+                        <h4>Feelings Explorer</h4>
+                        <p>Look at the face and pick the right feeling. Learn about emotions!</p>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('bubble')">
+                    <div class="game-card-top">🫧</div>
+                    <div class="game-card-body">
+                        <div class="game-badge">Calming</div>
+                        <h4>Bubble Pop</h4>
+                        <p>Pop all the bubbles! A calming and satisfying activity.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div
+                style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-xl);padding:24px;">
+                <h3 style="color:#fff;margin-bottom:16px;">🏆 My Achievements</h3>
+                <div id="achievements-list" style="display:flex;gap:12px;flex-wrap:wrap;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── GAME MODALS ── -->
+
+    <!-- Memory Match -->
+    <div class="game-modal-overlay" id="modal-memory">
+        <div class="game-modal" style="position:relative;">
+            <button class="game-close-btn" onclick="closeGame('memory')">✕</button>
+            <h3>🃏 Animal Match</h3>
+            <div class="game-score">
+                <span>Moves: <span class="score-val" id="mem-moves">0</span></span>
+                <span>Pairs: <span class="score-val" id="mem-pairs">0</span> / 8</span>
+                <button onclick="initMemory()"
+                    style="background:rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:99px;font-size:0.8rem;font-weight:700;cursor:pointer;">🔄
+                    New Game</button>
+            </div>
+            <div class="match-grid" id="memory-grid"></div>
+            <div class="game-feedback" id="mem-feedback"></div>
+        </div>
+    </div>
+
+    <!-- Color Quest -->
+    <div class="game-modal-overlay" id="modal-colors">
+        <div class="game-modal" style="position:relative;">
+            <button class="game-close-btn" onclick="closeGame('colors')">✕</button>
+            <h3>🎨 Color Quest</h3>
+            <div class="game-score">
+                <span>Score: <span class="score-val" id="col-score">0</span></span>
+                <span>Streak: <span class="score-val" id="col-streak">0</span> 🔥</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.7);text-align:center;margin-bottom:16px;">Find this color:</p>
+            <div style="font-size:2rem;font-weight:900;color:#fff;text-align:center;margin-bottom:12px;" id="col-name">
+            </div>
+            <div class="color-target" id="col-target"></div>
+            <div class="color-options" id="col-options"></div>
+            <div class="game-feedback" id="col-feedback"></div>
+        </div>
+    </div>
+
+    <!-- Count & Tap -->
+    <div class="game-modal-overlay" id="modal-counting">
+        <div class="game-modal" style="position:relative;">
+            <button class="game-close-btn" onclick="closeGame('counting')">✕</button>
+            <h3>🔢 Count & Tap</h3>
+            <div class="game-score">
+                <span>Score: <span class="score-val" id="cnt-score">0</span></span>
+                <span>Level: <span class="score-val" id="cnt-level">1</span></span>
+            </div>
+            <p style="color:rgba(255,255,255,0.7);text-align:center;margin-bottom:8px;">How many are there?</p>
+            <div class="count-display" id="cnt-display"></div>
+            <div class="count-options" id="cnt-options"></div>
+            <div class="game-feedback" id="cnt-feedback"></div>
+        </div>
+    </div>
+
+    <!-- Shape Finder -->
+    <div class="game-modal-overlay" id="modal-shapes">
+        <div class="game-modal" style="position:relative;">
+            <button class="game-close-btn" onclick="closeGame('shapes')">✕</button>
+            <h3>🔷 Shape Finder</h3>
+            <div class="game-score">
+                <span>Score: <span class="score-val" id="shp-score">0</span></span>
+                <span>Streak: <span class="score-val" id="shp-streak">0</span> 🔥</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.7);text-align:center;margin-bottom:12px;">Find the:</p>
+            <div style="font-size:2.2rem;font-weight:900;color:#fff;text-align:center;margin-bottom:20px;"
+                id="shp-name"></div>
+            <div id="shp-options" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;"></div>
+            <div class="game-feedback" id="shp-feedback"></div>
+        </div>
+    </div>
+
+    <!-- Feelings Explorer -->
+    <div class="game-modal-overlay" id="modal-emotions">
+        <div class="game-modal" style="position:relative;">
+            <button class="game-close-btn" onclick="closeGame('emotions')">✕</button>
+            <h3>😊 Feelings Explorer</h3>
+            <div class="game-score">
+                <span>Score: <span class="score-val" id="emo-score">0</span></span>
+                <span>Streak: <span class="score-val" id="emo-streak">0</span> 🔥</span>
+            </div>
+            <div style="font-size:5rem;text-align:center;margin:16px 0;" id="emo-face"></div>
+            <p style="color:rgba(255,255,255,0.7);text-align:center;margin-bottom:16px;">How is this person feeling?</p>
+            <div id="emo-options" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;"></div>
+            <div class="game-feedback" id="emo-feedback"></div>
+        </div>
+    </div>
+
+    <!-- Bubble Pop -->
+    <div class="game-modal-overlay" id="modal-bubble">
+        <div class="game-modal" style="position:relative;">
+            <button class="game-close-btn" onclick="closeGame('bubble')">✕</button>
+            <h3>🫧 Bubble Pop</h3>
+            <div class="game-score">
+                <span>Popped: <span class="score-val" id="bub-count">0</span></span>
+                <button onclick="spawnBubbles()"
+                    style="background:rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:99px;font-size:0.8rem;font-weight:700;cursor:pointer;">🫧
+                    More Bubbles!</button>
+            </div>
+            <div id="bubble-area"
+                style="position:relative;height:320px;background:rgba(255,255,255,0.04);border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(255,255,255,0.1);">
+            </div>
+            <p style="color:rgba(255,255,255,0.5);text-align:center;font-size:0.8rem;margin-top:12px;">Tap the bubbles
+                to pop them! 🎉</p>
+        </div>
+    </div>
+
+    <script>
+        // ── Stars background ──
+        const bg = document.getElementById('stars-bg');
+        for (let i = 0; i < 80; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;--d:${2 + Math.random() * 4}s;--o:${0.3 + Math.random() * 0.7};animation-delay:${Math.random() * 4}s;`;
+            bg.appendChild(s);
+        }
+
+        // ── Achievements ──
+        const ACHIEVEMENTS = [
+            { id: 'first_match', icon: '🃏', label: 'First Match!', game: 'memory' },
+            { id: 'color_master', icon: '🎨', label: 'Color Master', game: 'colors' },
+            { id: 'counter', icon: '🔢', label: 'Super Counter', game: 'counting' },
+            { id: 'shape_star', icon: '🔷', label: 'Shape Star', game: 'shapes' },
+            { id: 'feelings_friend', icon: '😊', label: 'Feelings Friend', game: 'emotions' },
+            { id: 'bubble_popper', icon: '🫧', label: 'Bubble Popper', game: 'bubble' },
+        ];
+        function getUnlocked() { return JSON.parse(localStorage.getItem('pod_achievements') || '[]'); }
+        function unlock(id) {
+            const u = getUnlocked();
+            if (!u.includes(id)) { u.push(id); localStorage.setItem('pod_achievements', JSON.stringify(u)); renderAchievements(); }
+        }
+        function renderAchievements() {
+            const u = getUnlocked();
+            document.getElementById('achievements-list').innerHTML = ACHIEVEMENTS.map(a => `
+        <div style="text-align:center;padding:12px 16px;border-radius:var(--radius-md);background:${u.includes(a.id) ? 'rgba(61,189,167,0.2)' : 'rgba(255,255,255,0.04)'};border:1px solid ${u.includes(a.id) ? 'rgba(61,189,167,0.4)' : 'rgba(255,255,255,0.08)'};min-width:80px;">
+          <div style="font-size:1.8rem;${u.includes(a.id) ? '' : 'filter:grayscale(1);opacity:0.3;'}">${a.icon}</div>
+          <div style="font-size:0.7rem;color:${u.includes(a.id) ? '#6FD4C3' : 'rgba(255,255,255,0.3)'};font-weight:700;margin-top:4px;">${a.label}</div>
+        </div>`).join('');
+        }
+        renderAchievements();
+
+        // ── Game open/close ──
+        function openGame(id) {
+            document.getElementById('modal-' + id).classList.add('open');
+            if (id === 'memory') initMemory();
+            if (id === 'colors') initColors();
+            if (id === 'counting') initCounting();
+            if (id === 'shapes') initShapes();
+            if (id === 'emotions') initEmotions();
+            if (id === 'bubble') spawnBubbles();
+        }
+        function closeGame(id) { document.getElementById('modal-' + id).classList.remove('open'); }
+
+        // ═══════════════════════════════════════════
+        // 1. MEMORY MATCH
+        // ═══════════════════════════════════════════
+        const ANIMALS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼'];
+        let memCards = [], memFlipped = [], memMatched = 0, memMoves = 0, memLocked = false;
+
+        function initMemory() {
+            const deck = [...ANIMALS, ...ANIMALS].sort(() => Math.random() - 0.5);
+            memFlipped = []; memMatched = 0; memMoves = 0; memLocked = false;
+            document.getElementById('mem-moves').textContent = 0;
+            document.getElementById('mem-pairs').textContent = 0;
+            document.getElementById('mem-feedback').textContent = '';
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = deck.map((e, i) => `
+        <div class="match-card hidden-face" data-idx="${i}" data-emoji="${e}" onclick="flipCard(this)">
+          <span style="display:none">${e}</span>
+        </div>`).join('');
+        }
+
+        function flipCard(el) {
+            if (memLocked || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+            el.classList.add('flipped');
+            el.querySelector('span').style.display = '';
+            el.classList.remove('hidden-face');
+            memFlipped.push(el);
+            if (memFlipped.length === 2) {
+                memLocked = true; memMoves++;
+                document.getElementById('mem-moves').textContent = memMoves;
+                const [a, b] = memFlipped;
+                if (a.dataset.emoji === b.dataset.emoji) {
+                    a.classList.add('matched'); b.classList.add('matched');
+                    memMatched++;
+                    document.getElementById('mem-pairs').textContent = memMatched;
+                    document.getElementById('mem-feedback').textContent = '✨ Match!';
+                    if (memMatched === 8) {
+                        document.getElementById('mem-feedback').textContent = '🎉 You found all pairs! Amazing!';
+                        unlock('first_match');
+                    }
+                    memFlipped = []; memLocked = false;
+                } else {
+                    setTimeout(() => {
+                        [a, b].forEach(c => { c.classList.remove('flipped'); c.classList.add('hidden-face'); c.querySelector('span').style.display = 'none'; });
+                        document.getElementById('mem-feedback').textContent = '';
+                        memFlipped = []; memLocked = false;
+                    }, 900);
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // 2. COLOR QUEST
+        // ═══════════════════════════════════════════
+        const COLORS = [
+            { name: 'Red', hex: '#E53E3E' }, { name: 'Blue', hex: '#3182CE' }, { name: 'Green', hex: '#38A169' },
+            { name: 'Yellow', hex: '#D69E2E' }, { name: 'Purple', hex: '#805AD5' }, { name: 'Orange', hex: '#DD6B20' },
+            { name: 'Pink', hex: '#D53F8C' }, { name: 'Teal', hex: '#2C7A7B' }
+        ];
+        let colScore = 0, colStreak = 0, colTarget;
+
+        function initColors() { colScore = 0; colStreak = 0; document.getElementById('col-score').textContent = 0; document.getElementById('col-streak').textContent = 0; nextColor(); }
+        function nextColor() {
+            colTarget = COLORS[Math.floor(Math.random() * COLORS.length)];
+            document.getElementById('col-name').textContent = colTarget.name;
+            document.getElementById('col-target').style.background = colTarget.hex;
+            document.getElementById('col-feedback').textContent = '';
+            const opts = [colTarget, ...COLORS.filter(c => c !== colTarget).sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
+            document.getElementById('col-options').innerHTML = opts.map(c =>
+                `<div class="color-option" style="background:${c.hex};" onclick="pickColor('${c.name}')"></div>`).join('');
+        }
+        function pickColor(name) {
+            if (name === colTarget.name) {
+                colScore += 10; colStreak++;
+                document.getElementById('col-score').textContent = colScore;
+                document.getElementById('col-streak').textContent = colStreak;
+                document.getElementById('col-feedback').textContent = '🎉 Correct! Well done!';
+                if (colScore >= 50) unlock('color_master');
+                setTimeout(nextColor, 800);
+            } else {
+                colStreak = 0; document.getElementById('col-streak').textContent = 0;
+                document.getElementById('col-feedback').textContent = `❌ That's ${name}. Try again!`;
+                setTimeout(nextColor, 1200);
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // 3. COUNT & TAP
+        // ═══════════════════════════════════════════
+        const COUNT_EMOJIS = ['⭐', '🌸', '🐶', '🍎', '🎈', '🦋', '🌈', '🐠'];
+        let cntScore = 0, cntLevel = 1, cntAnswer;
+
+        function initCounting() { cntScore = 0; cntLevel = 1; document.getElementById('cnt-score').textContent = 0; document.getElementById('cnt-level').textContent = 1; nextCount(); }
+        function nextCount() {
+            const max = Math.min(3 + cntLevel, 10);
+            cntAnswer = Math.floor(Math.random() * max) + 1;
+            const emoji = COUNT_EMOJIS[Math.floor(Math.random() * COUNT_EMOJIS.length)];
+            document.getElementById('cnt-display').textContent = emoji.repeat(cntAnswer);
+            document.getElementById('cnt-feedback').textContent = '';
+            const wrong1 = cntAnswer === 1 ? 2 : cntAnswer - 1;
+            const wrong2 = cntAnswer >= max ? cntAnswer - 2 : cntAnswer + 1;
+            const opts = [cntAnswer, wrong1, wrong2, Math.floor(Math.random() * max) + 1]
+                .filter((v, i, a) => v > 0 && a.indexOf(v) === i).slice(0, 4).sort(() => Math.random() - 0.5);
+            document.getElementById('cnt-options').innerHTML = opts.map(n =>
+                `<button class="count-option" onclick="pickCount(this,${n})">${n}</button>`).join('');
+        }
+        function pickCount(el, n) {
+            document.querySelectorAll('.count-option').forEach(b => b.onclick = null);
+            if (n === cntAnswer) {
+                el.classList.add('correct');
+                cntScore += 10; cntLevel = Math.min(cntLevel + 1, 8);
+                document.getElementById('cnt-score').textContent = cntScore;
+                document.getElementById('cnt-level').textContent = cntLevel;
+                document.getElementById('cnt-feedback').textContent = '🌟 Correct! You\'re a star!';
+                if (cntScore >= 50) unlock('counter');
+                setTimeout(nextCount, 900);
+            } else {
+                el.classList.add('wrong');
+                document.getElementById('cnt-feedback').textContent = `❌ The answer was ${cntAnswer}. Keep trying!`;
+                setTimeout(nextCount, 1200);
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // 4. SHAPE FINDER
+        // ═══════════════════════════════════════════
+        const SHAPES = [
+            { name: 'Circle', emoji: '⭕' }, { name: 'Square', emoji: '🟦' }, { name: 'Triangle', emoji: '🔺' },
+            { name: 'Star', emoji: '⭐' }, { name: 'Heart', emoji: '❤️' }, { name: 'Diamond', emoji: '💎' }
+        ];
+        let shpScore = 0, shpStreak = 0, shpTarget;
+
+        function initShapes() { shpScore = 0; shpStreak = 0; document.getElementById('shp-score').textContent = 0; document.getElementById('shp-streak').textContent = 0; nextShape(); }
+        function nextShape() {
+            shpTarget = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+            document.getElementById('shp-name').textContent = shpTarget.name;
+            document.getElementById('shp-feedback').textContent = '';
+            const opts = [shpTarget, ...SHAPES.filter(s => s !== shpTarget).sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
+            document.getElementById('shp-options').innerHTML = opts.map(s =>
+                `<button onclick="pickShape('${s.name}')" style="padding:20px;border-radius:var(--radius-md);background:rgba(124,111,205,0.2);border:2px solid rgba(124,111,205,0.4);color:#fff;font-size:2rem;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(124,111,205,0.4)'" onmouseout="this.style.background='rgba(124,111,205,0.2)'">${s.emoji}</button>`).join('');
+        }
+        function pickShape(name) {
+            if (name === shpTarget.name) {
+                shpScore += 10; shpStreak++;
+                document.getElementById('shp-score').textContent = shpScore;
+                document.getElementById('shp-streak').textContent = shpStreak;
+                document.getElementById('shp-feedback').textContent = '🎉 That\'s right!';
+                if (shpScore >= 50) unlock('shape_star');
+                setTimeout(nextShape, 800);
+            } else {
+                shpStreak = 0; document.getElementById('shp-streak').textContent = 0;
+                document.getElementById('shp-feedback').textContent = `❌ That's a ${name}. Try again!`;
+                setTimeout(nextShape, 1200);
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // 5. FEELINGS EXPLORER
+        // ═══════════════════════════════════════════
+        const EMOTIONS = [
+            { face: '😊', name: 'Happy' }, { face: '😢', name: 'Sad' }, { face: '😠', name: 'Angry' },
+            { face: '😨', name: 'Scared' }, { face: '😴', name: 'Tired' }, { face: '😄', name: 'Excited' },
+            { face: '🤔', name: 'Confused' }, { face: '😌', name: 'Calm' }
+        ];
+        let emoScore = 0, emoStreak = 0, emoTarget;
+
+        function initEmotions() { emoScore = 0; emoStreak = 0; document.getElementById('emo-score').textContent = 0; document.getElementById('emo-streak').textContent = 0; nextEmotion(); }
+        function nextEmotion() {
+            emoTarget = EMOTIONS[Math.floor(Math.random() * EMOTIONS.length)];
+            document.getElementById('emo-face').textContent = emoTarget.face;
+            document.getElementById('emo-feedback').textContent = '';
+            const opts = [emoTarget, ...EMOTIONS.filter(e => e !== emoTarget).sort(() => Math.random() - 0.5).slice(0, 3)].sort(() => Math.random() - 0.5);
+            document.getElementById('emo-options').innerHTML = opts.map(e =>
+                `<button onclick="pickEmotion('${e.name}')" style="padding:14px;border-radius:var(--radius-md);background:rgba(124,111,205,0.2);border:2px solid rgba(124,111,205,0.4);color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.2s;">${e.face} ${e.name}</button>`).join('');
+        }
+        function pickEmotion(name) {
+            if (name === emoTarget.name) {
+                emoScore += 10; emoStreak++;
+                document.getElementById('emo-score').textContent = emoScore;
+                document.getElementById('emo-streak').textContent = emoStreak;
+                document.getElementById('emo-feedback').textContent = '💛 Correct! You understand feelings!';
+                if (emoScore >= 50) unlock('feelings_friend');
+                setTimeout(nextEmotion, 800);
+            } else {
+                emoStreak = 0; document.getElementById('emo-streak').textContent = 0;
+                document.getElementById('emo-feedback').textContent = `❌ This face is ${emoTarget.name}. Keep learning!`;
+                setTimeout(nextEmotion, 1400);
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // 6. BUBBLE POP
+        // ═══════════════════════════════════════════
+        let bubCount = 0;
+        const BUB_COLORS = ['#7C6FCD', '#3DBDA7', '#FF7B6B', '#F5A623', '#D53F8C', '#3182CE'];
+
+        function spawnBubbles() {
+            const area = document.getElementById('bubble-area');
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const size = 40 + Math.random() * 50;
+                    const bub = document.createElement('div');
+                    bub.style.cssText = `
+            position:absolute;
+            width:${size}px;height:${size}px;border-radius:50%;
+            background:${BUB_COLORS[Math.floor(Math.random() * BUB_COLORS.length)]}55;
+            border:2px solid ${BUB_COLORS[Math.floor(Math.random() * BUB_COLORS.length)]}99;
+            left:${Math.random() * (100 - size / 3)}%;
+            top:${Math.random() * (100 - size / 3)}%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:${size * 0.35}px;cursor:pointer;
+            animation:float-bub ${2 + Math.random() * 3}s ease-in-out infinite alternate;
+            transition:transform 0.1s;
+          `;
+                    bub.textContent = '🫧';
+                    bub.onclick = () => {
+                        bub.style.transform = 'scale(1.5)';
+                        bub.style.opacity = '0';
+                        bub.style.transition = 'all 0.2s';
+                        setTimeout(() => bub.remove(), 200);
+                        bubCount++;
+                        document.getElementById('bub-count').textContent = bubCount;
+                        if (bubCount >= 20) unlock('bubble_popper');
+                    };
+                    area.appendChild(bub);
+                }, i * 80);
+            }
+        }
+
+        // Add float animation
+        const style = document.createElement('style');
+        style.textContent = '@keyframes float-bub { from{transform:translateY(0)} to{transform:translateY(-12px)} }';
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wellbeing & Lifestyle for POD</title>
+    <meta name="description"
+        content="Supporting families of children with autism and Down syndrome — every step of the way." />
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .landing-body {
+            background: linear-gradient(135deg, #1a1740 0%, #2d2a4a 40%, #1e3a4a 100%);
+            min-height: 100vh;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(124, 111, 205, 0.08);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: 100px;
+            left: -60px;
+            animation-delay: 2s;
+            background: rgba(61, 189, 167, 0.08);
+        }
+
+        .shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 40%;
+            left: 30%;
+            animation-delay: 4s;
+            background: rgba(255, 123, 107, 0.06);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .landing-nav {
+            padding: 24px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+        }
+
+        .landing-logo {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        .landing-logo span {
+            color: #6FD4C3;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-link {
+            padding: 8px 18px;
+            border-radius: 99px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.25s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .landing-hero {
+            padding: 80px 48px 60px;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 99px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-tag .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6FD4C3;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .landing-hero h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+        }
+
+        .landing-hero h1 span {
+            background: linear-gradient(135deg, #6FD4C3, #A99FE0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .landing-hero p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 1.1rem;
+            max-width: 560px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+        }
+
+        .landing-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 80px;
+        }
+
+        .btn-parent {
+            padding: 16px 40px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #3DBDA7, #6FD4C3);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 6px 24px rgba(61, 189, 167, 0.4);
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-parent:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(61, 189, 167, 0.5);
+        }
+
+        .btn-teacher {
+            padding: 16px 40px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1rem;
+            backdrop-filter: blur(8px);
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-teacher:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .features-strip {
+            padding: 0 48px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px 20px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            transition: all 0.25s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .feature-card .f-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h4 {
+            color: #fff;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        .stats-strip {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            padding: 40px 48px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .num {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            color: #fff;
+        }
+
+        .stat-item .num span {
+            color: #6FD4C3;
+        }
+
+        .stat-item .lbl {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        .footer-strip {
+            text-align: center;
+            padding: 32px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            z-index: 5;
+        }
+    </style>
+</head>
+
+<body class="landing-body">
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <nav class="landing-nav">
+        <div class="landing-logo">🌟 Wellbeing &amp; Lifestyle <span>for POD</span></div>
+        <div class="nav-links">
+            <a href="parent-login.html" class="nav-link">Parent Login</a>
+            <a href="teacher-login.html" class="nav-link">Teacher Login</a>
+        </div>
+    </nav>
+
+    <section class="landing-hero">
+        <div class="hero-tag">
+            <div class="dot"></div>
+            Supporting Autism &amp; Down Syndrome Families
+        </div>
+        <h1>Every Child Deserves to<br /><span>Thrive &amp; Flourish</span></h1>
+        <p>A complete support platform for parents and teachers of children with autism and Down syndrome — resources,
+            guides, expert tools, and a caring community.</p>
+        <div class="landing-cta">
+            <a href="parent-login.html" class="btn-parent">👨‍👩‍👧 I'm a Parent</a>
+            <a href="teacher-login.html" class="btn-teacher">👩‍🏫 I'm a Teacher</a>
+        </div>
+    </section>
+
+    <div class="stats-strip">
+        <div class="stat-item">
+            <div class="num">10<span>+</span></div>
+            <div class="lbl">Resource Sections</div>
+        </div>
+        <div class="stat-item">
+            <div class="num">50<span>+</span></div>
+            <div class="lbl">Activity Guides</div>
+        </div>
+        <div class="stat-item">
+            <div class="num">24<span>/7</span></div>
+            <div class="lbl">AI Chatbot Support</div>
+        </div>
+        <div class="stat-item">
+            <div class="num">1<span>tap</span></div>
+            <div class="lbl">SOS Emergency</div>
+        </div>
+    </div>
+
+    <div class="features-strip">
+        <div class="feature-card">
+            <div class="f-icon">🏠</div>
+            <h4>Progress Dashboard</h4>
+            <p>Track milestones &amp; improvements</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🏫</div>
+            <h4>Schools Directory</h4>
+            <p>Find inclusive schools to enroll</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🏥</div>
+            <h4>Care Centers</h4>
+            <p>Hospitals &amp; therapy specialists</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🛝</div>
+            <h4>Play Areas</h4>
+            <p>Sensory-friendly parks &amp; spaces</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🎨</div>
+            <h4>Home Activities</h4>
+            <p>Engaging activities for every day</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🧘</div>
+            <h4>Calm &amp; Relax</h4>
+            <p>Soothing techniques &amp; exercises</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">📖</div>
+            <h4>Parent Guides</h4>
+            <p>Feeding, bathing, sleep &amp; more</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🤖</div>
+            <h4>AI Chatbot</h4>
+            <p>24/7 intelligent support</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">📋</div>
+            <h4>Teacher Updates</h4>
+            <p>Stay connected with school</p>
+        </div>
+        <div class="feature-card">
+            <div class="f-icon">🆘</div>
+            <h4>SOS Emergency</h4>
+            <p>One-tap emergency calling</p>
+        </div>
+    </div>
+
+    <div class="footer-strip">
+        © 2026 Wellbeing &amp; Lifestyle for POD · Made with 💜 for special families
+    </div>
+</body>
+
+</html>
